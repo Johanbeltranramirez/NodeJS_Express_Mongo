@@ -70,6 +70,7 @@ async function crearUsuario(body){
     return await usuario.save();
 }
 
+// Función asíncrona para MODIFICAR un objeto de tipo usuario
 async function actualizarUsuario(email, body){
     let usuario = await Usuario.findOneAndUpdate({"email": email}, {
       $set: {
