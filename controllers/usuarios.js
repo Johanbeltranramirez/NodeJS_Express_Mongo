@@ -3,10 +3,6 @@ const Usuario = require('../models/usuario_model');
 const Joi = require('joi');
 const ruta = express.Router();
 
-ruta.get('/', (req,res)=>{
-    res.json('Respuesta a petición GET de USUARIOS funcionando correctamente...');
-});
-
 // Validacones para el objeto usuario
 const schema = Joi.object({
     nombre: Joi.string()
@@ -22,15 +18,19 @@ const schema = Joi.object({
     .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'edu', 'co'] } })
 });
 
-// Función asíncrona para crear un objeto de tipo usuario
-async function crearUsuario(body){
-    let usuario = new Usuario({
-        email        : body.email,
-        nombre       : body.nombre,
-        password     : body.password
-    });
-    return await usuario.save();
-}
+//Endpoint de tipo GET para el recurso usuarios. Lista todos los usuarios
+ruta.get('/', (req,res)=>{
+    let resultado = listarUsuarioActivos();
+    resultado.then(usuarios => {
+        res.json(usuarios)
+    }).catch(err => {
+        res.status(400).json(
+            {
+                err
+            }
+        )
+    })
+});
 
 // Endpoint de tipo POST para el recurso USUARIOS
 ruta.post('/', (req, res) => {
@@ -56,6 +56,41 @@ ruta.post('/', (req, res) => {
     }
 });
   
+// Función asíncrona para crear un objeto de tipo usuario
+async function crearUsuario(body){
+    let usuario = new Usuario({
+        email        : body.email,
+        nombre       : body.nombre,
+        password     : body.password
+    });
+    return await usuario.save();
+}
+
+async function actualizarUsuario(email, body){
+    let usuario = await Usuario.findOneAndUpdate({"email": email}, {
+      $set: {
+        nombre: body.nombre,
+        password: body.password
+      }  
+    }, {new: true});
+    return usuario;
+}
+
+
+//Endpoint de tipo DELETE para el recurso USUARIOS
+ruta.delete('/:email', (req, res) => {
+    let resultado = desactivarUsuario(req.params.email);
+    resultado.then(valor => {
+        res.json({
+            usuario: valor
+        })
+    }).catch(err => {
+        res.status(400).json({
+            err
+        })
+    })
+});
+
 // Endpoint de tipo PUT para actualizar los datos del usuario
 ruta.put('/:email', (req, res) => {
     const {error, value} = schema.validate({nombre: req.body.nombre});
@@ -77,14 +112,25 @@ ruta.put('/:email', (req, res) => {
     }
 });
 
-async function actualizarUsuario(email, body){
+//Función asíncrona para inactivar un usuario 
+async function desactivarUsuario(email){
     let usuario = await Usuario.findOneAndUpdate({"email": email}, {
-      $set: {
-        nombre: body.nombre,
-        password: body.password
-      }  
+        $set: {
+            estado: false
+        }
     }, {new: true});
     return usuario;
 }
+
+//Función asíncrona para listar todos los usuarios activos
+async function listarUsuarioActivos(){
+    let usuarios = await Usuario.find({"estado": true});
+    return usuarios;
+}
+
+
+
+
+
 
 module.exports = ruta;
