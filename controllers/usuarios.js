@@ -128,9 +128,4 @@ async function listarUsuarioActivos(){
     return usuarios;
 }
 
-
-
-
-
-
 module.exports = ruta;
