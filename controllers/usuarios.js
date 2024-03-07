@@ -142,9 +142,4 @@ async function listarUsuarioActivos(){
 }
 >>>>>>> apirest
 
-
-
-
-
-
 module.exports = ruta;
