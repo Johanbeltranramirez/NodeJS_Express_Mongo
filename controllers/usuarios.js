@@ -1,8 +1,8 @@
 const express = require('express');
-const Usuario = require('../models/usuario_model');
-const Joi = require('joi');
+const logic = require('../logic/usuario_logic');
 const ruta = express.Router();
 
+<<<<<<< HEAD
 // Validacones para el objeto usuario
 const schema = Joi.object({
     nombre: Joi.string()
@@ -22,6 +22,11 @@ const schema = Joi.object({
 //Endpoint de tipo GET para el recurso usuarios. Lista todos los usuarios
 ruta.get('/', (req,res)=>{
     let resultado = listarUsuarioActivos();
+=======
+//Endpoint de tipo GET para el recurso usuarios. Lista todos los usuarios
+ruta.get('/', (req,res)=>{
+    let resultado = logic.listarUsuarioActivos();
+>>>>>>> apirest
     resultado.then(usuarios => {
         res.json(usuarios)
     }).catch(err => {
@@ -33,14 +38,17 @@ ruta.get('/', (req,res)=>{
     })
 });
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> apirest
 // Endpoint de tipo POST para el recurso USUARIOS
 ruta.post('/', (req, res) => {
     let body = req.body;
 
-    const {error, value} = schema.validate({nombre: body.nombre, email: body.email});
+    const {error, value} = logic.schema.validate({nombre: body.nombre, email: body.email});
     if(!error) {
-        let resultado = crearUsuario(body);
+        let resultado = logic.crearUsuario(body);
 
         resultado.then( user => {
             res.json({
@@ -57,6 +65,7 @@ ruta.post('/', (req, res) => {
         })
     }
 });
+<<<<<<< HEAD
   
 // Función asíncrona para crear un objeto de tipo usuario
 async function crearUsuario(body){
@@ -93,12 +102,14 @@ ruta.delete('/:email', (req, res) => {
         })
     })
 });
+=======
+>>>>>>> apirest
 
 // Endpoint de tipo PUT para actualizar los datos del usuario
 ruta.put('/:email', (req, res) => {
-    const {error, value} = schema.validate({nombre: req.body.nombre});
+    const {error, value} = logic.schema.validate({nombre: req.body.nombre});
     if(!error){
-        let resultado = actualizarUsuario(req.params.email, req.body);
+        let resultado = logic.actualizarUsuario(req.params.email, req.body);
         resultado.then(valor => {
             res.json({
                 valor
@@ -115,6 +126,7 @@ ruta.put('/:email', (req, res) => {
     }
 });
 
+<<<<<<< HEAD
 
 //Función asíncrona para inactivar un usuario 
 async function desactivarUsuario(email){
@@ -125,6 +137,21 @@ async function desactivarUsuario(email){
     }, {new: true});
     return usuario;
 }
+=======
+//Endpoint de tipo DELETE para el recurso USUARIOS
+ruta.delete('/:email', (req, res) => {
+    let resultado = logic.desactivarUsuario(req.params.email);
+    resultado.then(valor => {
+        res.json({
+            usuario: valor
+        })
+    }).catch(err => {
+        res.status(400).json({
+            err
+        })
+    })
+});
+>>>>>>> apirest
 
 
 //Función asíncrona para listar todos los usuarios activos
