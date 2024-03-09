@@ -18,9 +18,7 @@ const schema = Joi.object({
     .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'edu', 'co'] } })
 });
 
-<<<<<<< HEAD
 
-=======
 //Endpoint de tipo GET para el recurso usuarios. Lista todos los usuarios
 ruta.get('/', (req,res)=>{
     let resultado = listarUsuarioActivos();
@@ -34,7 +32,7 @@ ruta.get('/', (req,res)=>{
         )
     })
 });
->>>>>>> apirest
+
 
 // Endpoint de tipo POST para el recurso USUARIOS
 ruta.post('/', (req, res) => {
@@ -117,11 +115,7 @@ ruta.put('/:email', (req, res) => {
     }
 });
 
-<<<<<<< HEAD
 
-
-=======
->>>>>>> apirest
 //Función asíncrona para inactivar un usuario 
 async function desactivarUsuario(email){
     let usuario = await Usuario.findOneAndUpdate({"email": email}, {
@@ -132,15 +126,12 @@ async function desactivarUsuario(email){
     return usuario;
 }
 
-<<<<<<< HEAD
 
-
-=======
 //Función asíncrona para listar todos los usuarios activos
 async function listarUsuarioActivos(){
     let usuarios = await Usuario.find({"estado": true});
     return usuarios;
 }
->>>>>>> apirest
+
 
 module.exports = ruta;
