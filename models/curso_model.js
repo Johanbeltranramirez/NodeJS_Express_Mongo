@@ -27,4 +27,7 @@ const cursoSchema = new mongoose.Schema({
     }
 });
 module.exports = mongoose.model('Curso', cursoSchema);
+<<<<<<< HEAD
 
+=======
+>>>>>>> apirest
