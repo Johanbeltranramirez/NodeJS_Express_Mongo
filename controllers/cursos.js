@@ -79,15 +79,6 @@ async function desactivarCurso(id){
     }, {new: true});
     return curso;
 }
-<<<<<<< HEAD
-
-
-
-
-
-
-=======
->>>>>>> apirest
 
 
 
